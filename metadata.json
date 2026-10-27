@@ -1,0 +1,6 @@
+{
+  "name": "BJSEG Pós-Vendas",
+  "description": "Aplicativo oficial de pós-vendas, acompanhamento de RMA, ordens de serviço e programa de créditos da BJSEG.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,856 @@
+# PROMPT MESTRE — APLICATIVO DE PÓS-VENDAS E RMA DA BJSEG
+
+## 1. OBJETIVO DO PROJETO
+
+Crie um aplicativo moderno, profissional, responsivo e mobile-first para os clientes da BJSEG, empresa que trabalha com equipamentos de segurança eletrônica.
+
+O aplicativo deve ser focado no relacionamento com o cliente após a compra, principalmente no acompanhamento de produtos enviados para manutenção, troca, consulta de ordens de serviço, notificações, contato com o setor de Pós-Vendas e um programa de créditos por avaliação do atendimento.
+
+O nome inicial do aplicativo será **BJSEG Pós-Vendas**.
+
+O sistema deve ser desenvolvido com arquitetura preparada para uso real, priorizando uma experiência semelhante à de um aplicativo de celular, com possibilidade de instalação como PWA (Progressive Web App).
+
+Não crie apenas um protótipo visual. Desenvolva as telas, navegação, componentes, validações, modelos de dados e a estrutura necessária para futuras integrações reais.
+
+Quando uma API ou credencial ainda não estiver disponível, crie uma camada de integração preparada para recebê-la e um modo de demonstração com dados fictícios claramente identificados. Não simule uma integração real como se já estivesse funcionando.
+
+## 2. IDENTIDADE VISUAL E EXPERIÊNCIA
+
+Crie uma interface profissional, moderna, intuitiva e organizada, adequada a clientes empresariais e pessoas que compram equipamentos de segurança eletrônica.
+
+### Identidade visual
+
+- Utilizar o nome BJSEG Pós-Vendas.
+- Priorizar tons de laranja, branco, cinza e grafite, com aparência corporativa.
+- Usar o logotipo oficial da BJSEG somente se for fornecido. Caso contrário, criar um espaço reservado para inserir o logotipo posteriormente.
+- Utilizar ícones simples e reconhecíveis.
+- Utilizar cartões com cantos arredondados, espaçamento adequado e boa legibilidade.
+- Evitar excesso de cores, animações, elementos decorativos e informações desnecessárias.
+- Garantir acessibilidade, contraste adequado, botões fáceis de tocar e textos legíveis.
+- A interface deve funcionar bem em celulares Android, iPhones, tablets e computadores.
+- Todo o conteúdo visível ao usuário deve estar em português brasileiro, incluindo datas, valores em reais e mensagens de erro.
+
+### Navegação principal
+
+Criar uma navegação simples com as seguintes áreas:
+
+1. Início.
+2. Meus RMAs.
+3. Notificações.
+4. Meus créditos.
+5. Perfil.
+
+O contato com o Pós-Vendas também deve estar acessível de forma rápida nas telas de RMA.
+
+Não criar uma área de “Comprar novamente” ou uma loja virtual dentro do aplicativo.
+
+## 3. LOGIN, CADASTRO E SEGURANÇA
+
+Criar uma tela de entrada com a identidade visual da BJSEG.
+
+### Fluxo de autenticação
+
+1. O cliente informa seu CPF ou CNPJ.
+2. O sistema valida o formato do documento.
+3. A identidade do cliente deve ser confirmada por um código temporário enviado a um telefone ou e-mail previamente cadastrado.
+4. Após a confirmação, permitir acesso seguro à conta.
+5. Oferecer, quando tecnicamente suportado pelo dispositivo, acesso por PIN ou biometria, sem substituir os requisitos de segurança da autenticação inicial.
+6. Permitir recuperação de acesso.
+
+Não permitir que qualquer pessoa consulte RMAs somente digitando um CPF ou CNPJ.
+
+O cliente deve visualizar exclusivamente os dados e os atendimentos autorizados para sua conta.
+
+A autenticação deve ter proteção contra tentativas repetidas, expiração de códigos, controle de sessão e encerramento de sessão.
+
+Não armazenar senhas, códigos de autenticação ou documentos pessoais em locais inseguros. Não expor credenciais de APIs no código do aplicativo.
+
+Se houver necessidade de criar um cadastro inicial, utilizar os dados retornados pela integração autorizada ou um fluxo de cadastro validado.
+
+### Integração com o cadastro da BJSEG
+
+A intenção é consultar o cadastro existente na empresa e evitar que o cliente precise criar um cadastro duplicado.
+
+Antes de implementar a integração, identificar quais recursos a API realmente oferece. Não presumir que existe autenticação por CPF/CNPJ, envio de SMS, consulta de clientes ou alteração cadastral sem verificar.
+
+## 4. TELA INICIAL
+
+Criar uma tela inicial com saudação ao cliente e um resumo das informações mais importantes.
+
+### Elementos da tela
+
+- Saudação personalizada.
+- Quantidade de RMAs em andamento.
+- Quantidade de RMAs finalizados.
+- Aviso de pagamento pendente, quando houver.
+- Aviso de item disponível para retirada, quando houver.
+- Saldo de créditos acumulados.
+- Botão “Acompanhar meus RMAs”.
+- Botão “Falar com Pós-Vendas”.
+- Acesso às notificações.
+- Acesso ao perfil.
+
+Dar destaque visual a situações que exigem alguma ação do cliente, principalmente pagamento pendente e retirada de produtos.
+
+Não exibir informações internas da BJSEG na tela inicial.
+
+## 5. UNIDADES E LOJAS DA BJSEG
+
+O aplicativo deverá atender os clientes de todas as unidades da BJSEG em uma única plataforma.
+
+As unidades atualmente consideradas no projeto são:
+
+- Itaquaquecetuba — loja e centro de distribuição.
+- Santos.
+- Arujá.
+- São José dos Campos — loja.
+- Taubaté.
+- Escritório de São José dos Campos.
+
+A lista de unidades deve ser configurável por meio do sistema, sem precisar alterar o código da interface sempre que uma loja mudar.
+
+Os endereços completos, telefones, horários de atendimento e coordenadas devem ser cadastrados com informações oficiais. Não inventar endereços.
+
+Cada RMA deve permanecer vinculado à unidade em que o atendimento foi aberto. Essa mesma unidade será a referência para a retirada do produto.
+
+Não solicitar ao cliente que escolha uma segunda loja para retirada.
+
+Nas telas de liberação e retirada, apresentar automaticamente a loja vinculada ao RMA.
+
+Quando houver endereço e coordenadas válidos, oferecer a ação “Ver no mapa”, abrindo o aplicativo de mapas ou a localização correspondente.
+
+## 6. ÁREA “MEUS RMAs”
+
+Esta é uma das funcionalidades mais importantes do aplicativo.
+
+Criar uma tela com a lista de ordens de serviço de manutenção e troca vinculadas ao cliente autenticado.
+
+Cada cartão de RMA deve apresentar:
+
+- Número do RMA.
+- Nome do produto.
+- Código do produto, quando disponível.
+- Tipo de atendimento.
+- Data de abertura.
+- Status atual apresentado em linguagem simples.
+- Identificação da loja.
+- Botão “Ver minha OS”.
+
+### Filtros
+
+Permitir filtrar os atendimentos por:
+
+- Todos.
+- Em andamento.
+- Finalizados.
+- Manutenção em garantia.
+- Manutenção cliente.
+- Troca.
+
+Também permitir pesquisa pelo número do RMA e pelo nome ou código do produto.
+
+Não exibir RMAs de outros clientes.
+
+### Classificação dos tipos de atendimento
+
+Apresentar claramente um dos seguintes tipos:
+
+**Manutenção em garantia:** produto encaminhado para avaliação ou manutenção no âmbito da garantia, sujeito às condições e à análise técnica aplicáveis.
+
+**Manutenção cliente:** manutenção fora da garantia ou em que os custos devem ser assumidos pelo cliente.
+
+**Troca:** atendimento destinado à substituição do produto.
+
+O tipo de atendimento deve ter destaque na tela de detalhes.
+
+Se uma manutenção inicialmente classificada como garantia for reclassificada como manutenção cliente após avaliação técnica, atualizar a informação conforme os dados autorizados do sistema e apresentar uma comunicação clara ao cliente. Não inventar um resultado técnico.
+
+## 7. ORDEM DE SERVIÇO DIGITAL
+
+Ao selecionar “Ver minha OS”, abrir uma tela própria dentro do aplicativo.
+
+A ordem de serviço deverá ser digital e consultada diretamente na interface. Não oferecer botão para baixar o PDF da OS.
+
+A interface deve apresentar os campos disponíveis e autorizados do registro original.
+
+### Informações da OS
+
+- Número do RMA.
+- Nome do cliente.
+- Tipo de atendimento.
+- Nome do produto.
+- Código do produto.
+- Número de série, quando disponível.
+- Defeito informado pelo cliente.
+- Observações destinadas à visualização do cliente.
+- Unidade de abertura e retirada.
+- Data de abertura.
+- Previsão estimada.
+- Status atual.
+- Histórico de atualizações relevantes.
+
+O campo “Defeito informado pelo cliente” deve preservar o texto registrado no atendimento, sem substituir a descrição por uma interpretação automática.
+
+Se um campo não tiver informação, não inventar conteúdo. Omitir o campo ou informar que não há dados disponíveis, conforme a relevância.
+
+Não exibir dados internos desnecessários, como nome de usuários internos, movimentações de estoque, transferências internas, notas fiscais internas, procedimentos administrativos, informações privadas de fornecedores ou observações internas não destinadas ao cliente.
+
+### Previsão estimada
+
+O campo de previsão do sistema Object Data não é utilizado no processo atual descrito para este projeto.
+
+Portanto, calcular a previsão exibida no aplicativo a partir da data de abertura do RMA, acrescentando 30 dias corridos.
+
+Exemplo: abertura em 23/10/2026 resulta em previsão estimada para 22/11/2026.
+
+Apresentar a informação com o texto:
+
+“Prazo estimado: até 30 dias corridos após a abertura do RMA.”
+
+Mostrar a data calculada de maneira visível.
+
+Essa data é uma estimativa apresentada pelo aplicativo. Não afirmar que corresponde a um campo já preenchido no Object Data e não substituir os prazos legais ou compromissos específicos aplicáveis a cada caso.
+
+Se a data de abertura estiver ausente ou inválida, não gerar uma previsão fictícia.
+
+## 8. STATUS DO RMA E TRADUÇÃO PARA O CLIENTE
+
+O aplicativo deve consultar os status internos disponíveis no Object Data e apresentá-los em linguagem simples.
+
+A tradução deve acontecer na camada de apresentação, sem alterar automaticamente o processo interno do Object Data.
+
+### Status NOVO
+
+Apresentação ao cliente: “RMA aberto”.
+
+Mensagem explicativa:
+
+“Seu atendimento foi registrado e está aguardando as próximas etapas do processo.”
+
+Não enviar notificação push para este status.
+
+### Status CONFIRMADO
+
+Apresentação ao cliente: “Em análise pela BJSEG”.
+
+Mensagem explicativa:
+
+“Seu produto chegou ao setor de Pós-Vendas e está passando pelas etapas de triagem e encaminhamento.”
+
+Não enviar notificação push para este status.
+
+### Status ENVIADO AO FORNECEDOR
+
+Apresentação ao cliente: “Em análise pela assistência”.
+
+Mensagem explicativa:
+
+“Seu produto foi encaminhado para avaliação ou manutenção pela assistência técnica responsável.”
+
+Não afirmar que o reparo já começou ou foi concluído se essa informação não estiver disponível.
+
+Não enviar notificação push para este status.
+
+### Status AGUARDANDO PAGAMENTO
+
+Apresentação ao cliente: “Aguardando pagamento”.
+
+Mensagem explicativa:
+
+“Há uma etapa de pagamento pendente para dar continuidade ao atendimento. Entre em contato com o Pós-Vendas para receber as orientações.”
+
+Exibir o botão “Pagar agora”.
+
+O botão deve abrir uma conversa no WhatsApp oficial do Pós-Vendas, com uma mensagem preenchida que inclua o número do RMA.
+
+Não exibir valores de manutenção ou orçamento no aplicativo.
+
+Enviar notificação push para este status.
+
+Este status existente é utilizado no processo de itens com cobrança tabelada. Não criar uma nova etapa de orçamento dentro do aplicativo para substituir o fluxo atual de orçamentos tratados pelo WhatsApp.
+
+### Status LIBERADO
+
+Apresentação ao cliente: “Retornando à loja”.
+
+Mensagem explicativa:
+
+“Seu produto foi liberado para retorno à loja de origem. Aguarde a confirmação de que está disponível para retirada antes de se deslocar até a unidade.”
+
+Exibir em destaque:
+
+- Nome da loja.
+- Endereço completo.
+- Botão “Ver no mapa”.
+- Orientação para aguardar a confirmação de recebimento na loja.
+
+Enviar notificação push para este status.
+
+Importante: “Liberado” não significa necessariamente que o produto já chegou à loja e pode ser retirado.
+
+### Evento DISPONÍVEL PARA RETIRADA
+
+Criar um evento ou estado visível ao cliente com o nome “Disponível para retirada”.
+
+Esse evento só deve ser apresentado quando houver confirmação real de que o produto chegou à loja e está disponível para entrega ao cliente.
+
+Exibir:
+
+- Mensagem de confirmação.
+- Número do RMA.
+- Nome e endereço da loja.
+- Botão “Ver no mapa”.
+- Orientação para retirar o produto na unidade.
+
+Enviar notificação push quando essa confirmação ocorrer.
+
+Não tratar o status “Liberado” como confirmação automática de chegada à loja.
+
+Antes de implementar, verificar se a API Object Data disponibiliza um status, evento, campo ou registro de recebimento capaz de confirmar a chegada. Se não houver essa informação, criar uma integração ou mecanismo administrativo separado para registrar a confirmação, sem inventar uma confirmação automática.
+
+### Status TROCA
+
+Apresentação ao cliente: “Troca efetuada”.
+
+Mensagem explicativa:
+
+“A troca do produto foi registrada como concluída. Obrigado por utilizar os serviços da BJSEG.”
+
+A troca deve encerrar o fluxo de acompanhamento daquele RMA.
+
+Não mostrar novas etapas de manutenção depois de “Troca efetuada”.
+
+Enviar notificação push quando a troca for confirmada como concluída.
+
+## 9. HISTÓRICO DE ATUALIZAÇÕES
+
+Cada RMA deve ter uma linha do tempo organizada cronologicamente.
+
+O histórico deverá mostrar apenas as atualizações de status que sejam relevantes ao cliente e que tenham sido registradas ou confirmadas pela BJSEG.
+
+Cada evento poderá apresentar:
+
+- Nome do status.
+- Data e hora da atualização, quando disponíveis.
+- Explicação simples.
+- Informação adicional autorizada para o cliente.
+
+Não mostrar todas as movimentações internas do estoque ou operações administrativas.
+
+Preservar o histórico depois que o RMA for finalizado.
+
+Quando o status mudar, atualizar a tela de detalhes e o histórico conforme a fonte oficial de dados.
+
+Não inventar datas de atualização nem registrar uma etapa como concluída antes da confirmação.
+
+Para o status de troca, a linha do tempo deve terminar em “Troca efetuada”.
+
+## 10. NOTIFICAÇÕES
+
+Criar uma central de notificações dentro do aplicativo.
+
+As notificações devem ser armazenadas e identificadas como lidas ou não lidas.
+
+Implementar notificações push reais somente após configurar o serviço necessário, as permissões do dispositivo e o backend de envio.
+
+### Eventos que geram notificações
+
+1. Aguardando pagamento.
+2. Liberado — produto retornando à loja.
+3. Disponível para retirada — produto confirmado na loja.
+4. Troca efetuada.
+
+Não enviar notificações push para os status rotineiros “Novo”, “Confirmado” e “Enviado ao fornecedor”.
+
+### Exemplos de mensagens
+
+**Aguardando pagamento**
+
+Título: “Ação necessária no seu RMA”
+
+Mensagem: “Existe uma etapa de pagamento pendente. Entre em contato com o Pós-Vendas para receber as orientações.”
+
+Ação: abrir os detalhes do RMA.
+
+**Liberado**
+
+Título: “Seu produto está retornando à loja”
+
+Mensagem: “O produto foi liberado para retorno à loja de origem. Aguarde a confirmação de disponibilidade antes de ir retirar.”
+
+Ação: abrir o RMA e mostrar os dados da loja.
+
+**Disponível para retirada**
+
+Título: “Seu produto está disponível para retirada”
+
+Mensagem: “Seu produto chegou à loja e está disponível para retirada. Consulte o endereço na tela do RMA.”
+
+Ação: abrir o RMA com endereço e mapa em destaque.
+
+**Troca efetuada**
+
+Título: “Troca concluída”
+
+Mensagem: “A troca do seu produto foi registrada como concluída. Consulte os detalhes do atendimento no aplicativo.”
+
+Ação: abrir o RMA finalizado.
+
+Evitar notificações duplicadas para o mesmo evento. Cada notificação deve estar vinculada ao cliente e ao RMA correto.
+
+## 11. CONTATO COM O PÓS-VENDAS VIA WHATSAPP
+
+Criar um botão “Falar com Pós-Vendas” disponível na tela inicial e nos detalhes de cada RMA.
+
+O contato deverá abrir o WhatsApp oficial da BJSEG com uma mensagem previamente preenchida.
+
+Utilizar um número configurável, armazenado na configuração do aplicativo ou no backend.
+
+Não inventar o número oficial.
+
+### Mensagem padrão
+
+“Olá! Gostaria de obter informações sobre o RMA [NÚMERO DO RMA]. Poderiam me ajudar, por favor?”
+
+### Botão “Pagar agora”
+
+Quando o RMA estiver em “Aguardando pagamento”, abrir o WhatsApp com a seguinte mensagem:
+
+“Olá! Gostaria de realizar o pagamento referente ao RMA [NÚMERO DO RMA]. Poderiam me orientar sobre o pagamento, por favor?”
+
+Substituir o campo entre colchetes pelo número real do RMA selecionado.
+
+Utilizar um link de WhatsApp válido, com o texto codificado corretamente para a URL.
+
+Se o número ainda não tiver sido configurado, apresentar uma mensagem informando que o canal de atendimento precisa ser configurado. Não criar um link fictício.
+
+O aplicativo não deve implementar um gateway de pagamento na primeira versão.
+
+O botão “Pagar agora” inicia o contato com o Pós-Vendas. Ele não deve afirmar que o pagamento foi realizado nem alterar o status do RMA automaticamente.
+
+## 12. PROGRAMA DE CRÉDITOS POR AVALIAÇÃO
+
+Criar um programa de fidelização chamado “Meus créditos”.
+
+O objetivo é incentivar os clientes a avaliar a experiência de atendimento do Pós-Vendas da BJSEG.
+
+Cada avaliação válida deve gerar um crédito de **R$ 0,01 (um centavo)** para o cliente.
+
+Os créditos serão acumulados e poderão ser utilizados exclusivamente como desconto em futuras compras na BJSEG, conforme as regras do programa.
+
+Não permitir saque em dinheiro, transferência via Pix ou conversão em dinheiro disponível para retirada.
+
+### Quando solicitar a avaliação
+
+Quando um RMA for concluído por manutenção ou troca, mostrar ao cliente um convite para avaliar o atendimento.
+
+A avaliação deve estar associada ao RMA correspondente.
+
+Não solicitar uma nova avaliação para o mesmo RMA depois que ela já tiver sido registrada.
+
+### Formulário de avaliação
+
+Criar uma tela simples contendo:
+
+- Número do RMA.
+- Produto atendido.
+- Tipo de atendimento.
+- Pergunta: “Como foi sua experiência com o atendimento de Pós-Vendas da BJSEG?”
+- Avaliação por estrelas, de 1 a 5.
+- Campo de comentário opcional.
+- Botão “Enviar avaliação”.
+
+Permitir avaliações de 1, 2, 3, 4 ou 5 estrelas.
+
+Não exigir uma nota mínima para conceder o crédito. Qualquer avaliação válida, inclusive uma avaliação de uma estrela, deve gerar o crédito de R$ 0,01.
+
+O comentário é opcional e não deve ser obrigatório para a concessão do crédito.
+
+Exibir claramente a mensagem:
+
+“Avalie seu atendimento e receba R$ 0,01 em créditos para utilizar como desconto em futuras compras na BJSEG.”
+
+Após o envio bem-sucedido, exibir uma confirmação:
+
+“Obrigado por avaliar seu atendimento! Seu crédito de R$ 0,01 foi registrado.”
+
+A mensagem de confirmação só poderá aparecer depois de o backend confirmar o registro da avaliação e do crédito.
+
+### Regras contra duplicidade
+
+- Permitir apenas uma avaliação válida por RMA.
+- Impedir a geração de mais de um crédito para a mesma avaliação.
+- Validar a elegibilidade do RMA no servidor.
+- Não confiar apenas na validação feita pelo aplicativo.
+- Registrar a avaliação e o crédito em uma operação segura, com controle contra duplicidade.
+- Em caso de falha, não informar que o crédito foi concedido.
+- Preservar o histórico de avaliações e créditos.
+
+### Tela “Meus créditos”
+
+Criar uma carteira digital dentro do aplicativo.
+
+Exibir:
+
+- Saldo total disponível.
+- Mensagem explicando que os créditos são utilizados como desconto em futuras compras na BJSEG.
+- Valor mínimo necessário para utilização.
+- Progresso até o mínimo de utilização.
+- Histórico de créditos recebidos.
+- Histórico de descontos utilizados, quando houver.
+- Data de cada movimentação.
+- Identificação do RMA que originou o crédito, quando aplicável.
+
+Exemplo visual:
+
+Saldo: R$ 2,40
+
+Mínimo para utilizar: R$ 5,00
+
+Faltam R$ 2,60 para atingir o mínimo.
+
+Esse exemplo é apenas ilustrativo. O aplicativo deve calcular o saldo a partir dos lançamentos reais do sistema.
+
+### Valor mínimo para utilização
+
+O saldo mínimo para utilizar os créditos como desconto será de **R$ 5,00**.
+
+Enquanto o cliente possuir saldo inferior a R$ 5,00, exibir:
+
+“Continue avaliando seus atendimentos para acumular créditos. Você poderá utilizá-los como desconto quando atingir R$ 5,00.”
+
+Ao atingir o mínimo, exibir:
+
+“Você atingiu o saldo mínimo para utilizar seus créditos como desconto em futuras compras na BJSEG.”
+
+Atingir o saldo mínimo não significa que o desconto já foi aplicado a uma compra. A aplicação efetiva dependerá da integração com o sistema de vendas.
+
+### Aplicação dos créditos em compras
+
+Os créditos não devem ser convertidos em dinheiro ou enviados para uma conta bancária.
+
+O aplicativo deve ser preparado para integração com o sistema de vendas da BJSEG, de modo que os créditos possam ser utilizados como desconto em futuras compras.
+
+Antes de habilitar a utilização real, é necessário definir e configurar:
+
+- Se o cliente poderá utilizar todo o saldo ou apenas parte dele.
+- Se o desconto poderá ser utilizado nas lojas físicas, no e-commerce ou em ambos.
+- Como identificar o mesmo cliente em todas as unidades.
+- Como registrar o desconto na venda e no histórico de créditos.
+- Como tratar cancelamentos, devoluções e estornos.
+- Como serão tratadas a validade dos créditos e eventuais ajustes.
+
+Não simular uma compra real nem afirmar que um desconto foi aplicado sem confirmação do sistema de vendas.
+
+### Estrutura do histórico de créditos
+
+Cada lançamento deve registrar, no mínimo:
+
+- Identificador único da transação.
+- Identificador do cliente.
+- Identificador do RMA, quando aplicável.
+- Tipo de movimentação.
+- Valor da movimentação.
+- Data e hora.
+- Status.
+- Referência à avaliação ou venda correspondente.
+- Identificação do responsável por eventual ajuste administrativo.
+
+Os lançamentos devem ser auditáveis. O saldo deve ser calculado ou validado no backend, sem permitir que o cliente altere seu próprio saldo.
+
+### Integração e armazenamento
+
+Não presumir que o Object Data possui uma carteira de créditos.
+
+Criar um módulo próprio de créditos, com banco de dados e API segura, ou integrar com um serviço já existente depois de verificar sua disponibilidade.
+
+A avaliação e a concessão do crédito devem ser processadas no servidor.
+
+Criar um identificador único para impedir que a mesma avaliação gere créditos duplicados.
+
+Não implementar alterações manuais de saldo sem autenticação, autorização e registro de auditoria.
+
+## 13. PERFIL DO CLIENTE
+
+Criar uma tela de perfil com as informações disponíveis e autorizadas do cadastro.
+
+Campos que poderão ser exibidos conforme a disponibilidade dos dados:
+
+- Nome ou razão social.
+- CPF ou CNPJ mascarado.
+- E-mail.
+- Telefone.
+- Dados cadastrais necessários ao atendimento.
+
+Permitir solicitar atualização de e-mail e telefone.
+
+A alteração cadastral deve ser enviada ao sistema oficial somente se a API oferecer suporte a essa operação e se houver validação adequada.
+
+Se a integração não permitir alterar um campo, informar que a atualização precisa ser solicitada ao atendimento da BJSEG.
+
+Não permitir alterar livremente o CPF/CNPJ vinculado à conta ou o histórico de atendimentos.
+
+Criar opção de sair da conta e uma área com informações de privacidade.
+
+## 14. INTEGRAÇÃO COM OBJECT DATA
+
+A integração com a Object Data é essencial para consultar os RMAs reais.
+
+A empresa possui uma API, mas os endpoints, métodos de autenticação, parâmetros e formatos de resposta precisam ser fornecidos e verificados antes de implementar a integração definitiva.
+
+### Requisitos de integração
+
+- Consultar os RMAs do cliente autenticado.
+- Consultar detalhes dos RMAs.
+- Obter status atual.
+- Obter datas e dados do produto.
+- Obter a unidade vinculada ao atendimento.
+- Consultar o histórico disponível, quando houver.
+- Atualizar os dados exibidos conforme a fonte oficial.
+- Tratar erros, falhas de conexão, indisponibilidade e respostas incompletas.
+- Evitar chamadas excessivas e utilizar cache quando apropriado, sem comprometer a atualização dos status.
+- Restringir as consultas aos registros autorizados para o cliente.
+
+Não inventar endpoints, campos ou credenciais.
+
+Se o Object Data não disponibilizar algum dado, identificar a lacuna e propor uma integração complementar, sem apresentar dados fictícios como reais.
+
+### Separação entre dados internos e dados apresentados
+
+Criar uma camada de serviço responsável por converter os dados internos em dados apropriados para a interface do cliente.
+
+A camada deverá mapear os status internos para as descrições apresentadas neste prompt.
+
+Não alterar o fluxo operacional da Object Data apenas para adequar a interface do aplicativo.
+
+### Campos calculados no aplicativo
+
+A previsão de 30 dias corridos após a abertura do RMA deve ser calculada no aplicativo ou backend complementar, a partir da data de abertura.
+
+Esse cálculo não deve depender do campo “Data Previsão” da Object Data, pois esse campo não é utilizado no processo atual definido para o projeto.
+
+### Eventos adicionais
+
+O evento “Disponível para retirada” pode não existir como status próprio na Object Data.
+
+Antes de implementá-lo, verificar se existe um campo ou registro que permita confirmar a chegada do item à loja.
+
+Se não existir, criar um mecanismo complementar de confirmação, vinculado ao RMA e à loja de origem.
+
+Não marcar o item como disponível apenas porque seu status é “Liberado”.
+
+## 15. ARQUITETURA TÉCNICA
+
+Organizar o projeto para permitir desenvolvimento, testes e evolução.
+
+Priorizar uma aplicação web mobile-first, com possibilidade de instalação como PWA.
+
+Utilizar uma estrutura de componentes reutilizáveis e uma camada de serviços separada da interface.
+
+A escolha final das tecnologias deve ser compatível com o ambiente do Google AI Studio e com os serviços disponíveis no projeto.
+
+### Componentes sugeridos
+
+- Autenticação.
+- Navegação principal.
+- Página inicial.
+- Lista de RMAs.
+- Cartão de RMA.
+- Detalhes da OS.
+- Linha do tempo.
+- Central de notificações.
+- Carteira de créditos.
+- Formulário de avaliação.
+- Perfil.
+- Contato por WhatsApp.
+- Configurações de unidades.
+- Camada de integração com Object Data.
+- Camada de integração com o sistema de vendas.
+- Serviço de envio de notificações.
+
+### Backend
+
+Criar ou preparar um backend para gerenciar:
+
+- Autenticação e autorização.
+- Consulta segura dos RMAs.
+- Processamento de eventos.
+- Registro de avaliações.
+- Carteira de créditos.
+- Histórico financeiro dos créditos.
+- Notificações.
+- Configurações das lojas.
+- Auditoria de operações administrativas.
+
+O backend deve validar todas as operações importantes. Não confiar na interface do cliente para autorizar acessos, registrar créditos ou aplicar descontos.
+
+### Banco de dados
+
+Definir um modelo de dados adequado, com entidades para:
+
+- Clientes.
+- Contas e sessões.
+- RMAs ou referências aos RMAs externos.
+- Eventos de status.
+- Notificações.
+- Lojas.
+- Avaliações.
+- Carteiras de créditos.
+- Movimentações de créditos.
+- Referências de descontos utilizados.
+- Configurações do sistema.
+- Registros de auditoria.
+
+Sempre que possível, manter o registro oficial do RMA no sistema de origem e armazenar apenas os dados complementares necessários ao funcionamento do aplicativo.
+
+### Configuração e segredos
+
+Não inserir tokens, chaves privadas ou senhas diretamente no código enviado ao navegador.
+
+Utilizar variáveis de ambiente e armazenamento seguro de segredos no backend.
+
+Não expor credenciais de integração em arquivos públicos ou no repositório.
+
+Criar configurações separadas para desenvolvimento, teste e produção.
+
+## 16. PRIVACIDADE E PROTEÇÃO DOS DADOS
+
+O aplicativo tratará dados pessoais e informações comerciais dos clientes.
+
+Aplicar princípios de segurança e minimização de dados, observando a LGPD e as políticas aplicáveis da BJSEG.
+
+- Garantir que cada cliente veja apenas seus próprios dados autorizados.
+- Evitar exposição de CPF/CNPJ completo nas telas.
+- Proteger as sessões.
+- Utilizar comunicação segura por HTTPS em produção.
+- Validar dados de entrada no frontend e no backend.
+- Controlar permissões de acesso.
+- Registrar operações administrativas relevantes.
+- Evitar registrar dados pessoais desnecessários nos logs.
+- Definir regras para retenção e exclusão de dados.
+- Apresentar informações de privacidade e contato para solicitações relacionadas a dados pessoais.
+
+Não compartilhar dados pessoais de clientes com terceiros sem autorização e fundamento apropriados.
+
+## 17. TELAS E ESTADOS DE CARREGAMENTO
+
+Todas as telas devem tratar corretamente diferentes situações.
+
+Criar estados visuais para:
+
+- Carregamento.
+- Nenhum RMA encontrado.
+- Nenhuma notificação.
+- Nenhum crédito acumulado.
+- Erro de conexão.
+- Sessão expirada.
+- Dados incompletos.
+- Avaliação já enviada.
+- Falha ao registrar avaliação.
+- Falha ao consultar a Object Data.
+- Serviço de integração ainda não configurado.
+
+Exemplos de mensagens:
+
+“Você ainda não possui RMAs vinculados a esta conta.”
+
+“Não foi possível carregar seus atendimentos. Tente novamente em instantes.”
+
+“Esta integração ainda não está configurada.”
+
+“Você já avaliou este RMA.”
+
+As mensagens devem ser claras, educadas e úteis, sem exibir erros técnicos ou detalhes internos ao cliente.
+
+## 18. DADOS DE DEMONSTRAÇÃO
+
+Enquanto as APIs reais não estiverem conectadas, disponibilizar um modo de demonstração para testar a navegação.
+
+Utilizar exclusivamente dados fictícios, claramente identificados como demonstração.
+
+Não misturar dados de demonstração com registros reais.
+
+Criar alguns exemplos de RMA com diferentes status para validar a interface:
+
+- RMA aberto.
+- Em análise pela BJSEG.
+- Em análise pela assistência.
+- Aguardando pagamento.
+- Retornando à loja.
+- Disponível para retirada.
+- Troca efetuada.
+
+Criar também exemplos de avaliação e saldo de créditos para demonstrar o funcionamento visual da carteira.
+
+Os dados demonstrativos não podem gerar notificações reais, créditos reais ou alterações no sistema de vendas.
+
+Quando a integração real for ativada, permitir desabilitar o modo de demonstração de forma explícita e segura.
+
+## 19. FUNCIONALIDADES FORA DO ESCOPO INICIAL
+
+Não implementar como funcionalidades reais na primeira versão:
+
+- Compra de produtos dentro do aplicativo.
+- Botão “Comprar novamente”.
+- Gateway de pagamento.
+- Exibição de valores de manutenção e orçamentos.
+- Download de PDF da OS.
+- Saque ou transferência de créditos via Pix.
+- Alteração de status de RMA pelo cliente.
+- Confirmação automática de retirada sem registro oficial.
+- Consulta de notas fiscais, pedidos ou garantias sem integração verificada.
+
+Deixar a arquitetura preparada para futuras expansões, sem criar telas falsas que indiquem que esses serviços já funcionam.
+
+Possíveis evoluções futuras incluem consulta de pedidos, notas fiscais, garantias, equipamentos vinculados ao cliente, perguntas frequentes e avaliações de satisfação consolidadas.
+
+## 20. CRITÉRIOS DE ACEITAÇÃO
+
+Antes de considerar a primeira versão concluída, verificar os seguintes pontos:
+
+1. O cliente consegue acessar o aplicativo por um fluxo de autenticação seguro.
+2. O cliente consegue visualizar apenas os próprios RMAs autorizados.
+3. A lista de RMAs apresenta os dados essenciais.
+4. A OS é exibida digitalmente, sem depender de PDF para consulta.
+5. O tipo de atendimento fica claro.
+6. A previsão é calculada a partir da abertura do RMA, somando 30 dias corridos.
+7. Os status internos são traduzidos corretamente.
+8. O histórico apresenta somente eventos relevantes ao cliente.
+9. “Liberado” não é confundido com “Disponível para retirada”.
+10. A loja de origem e retirada é apresentada automaticamente.
+11. O contato com o Pós-Vendas abre o WhatsApp com o RMA correspondente.
+12. “Aguardando pagamento” não mostra valores e não altera o status por conta própria.
+13. As notificações são geradas apenas para os eventos definidos e não são duplicadas.
+14. O cliente pode avaliar um RMA concluído.
+15. Uma avaliação válida gera somente um crédito de R$ 0,01.
+16. Uma nota de uma estrela também concede o crédito.
+17. O saldo de créditos é calculado no backend.
+18. O mínimo para utilização é R$ 5,00.
+19. O aplicativo não permite saque ou transferência dos créditos.
+20. A utilização real dos créditos só é habilitada após integração com o sistema de vendas.
+21. O aplicativo funciona em telas pequenas e grandes.
+22. Não há credenciais privadas expostas no frontend.
+23. Falhas de integração são tratadas sem inventar informações.
+24. Os dados demonstrativos estão claramente separados dos dados reais.
+
+## 21. ORIENTAÇÕES PARA A CONSTRUÇÃO NO GOOGLE AI STUDIO
+
+Comece construindo uma versão funcional do aplicativo, priorizando a interface, navegação, organização dos componentes e fluxos de usuário.
+
+Não entregue somente uma imagem ou uma descrição das telas.
+
+Crie as páginas, os componentes, a estrutura de dados e a lógica necessária para demonstrar o funcionamento de ponta a ponta em modo de demonstração.
+
+Depois, organize as integrações reais em módulos independentes.
+
+Antes de implementar qualquer integração externa, identifique os dados necessários, os endpoints disponíveis e os métodos de autenticação. Se essas informações não tiverem sido fornecidas, crie interfaces de serviço e indique exatamente quais configurações estão faltando.
+
+Não invente credenciais, números de telefone, endereços, endpoints ou respostas de APIs.
+
+Quando uma funcionalidade depender de uma configuração externa, deixe claro o que está funcionando, o que está em modo de demonstração e o que ainda precisa ser conectado.
+
+Priorize primeiro o fluxo completo de RMA e, em seguida, as avaliações e os créditos.
+
+Ao final, forneça um resumo da estrutura criada, das telas implementadas, das integrações pendentes e das instruções para executar e testar o aplicativo.
+
+**Resultado esperado:** um aplicativo BJSEG Pós-Vendas com aparência profissional, experiência mobile-first, acompanhamento digital de RMA, histórico de status, notificações, atendimento via WhatsApp e carteira de créditos por avaliação, preparado para integrar os sistemas reais da BJSEG com segurança.
