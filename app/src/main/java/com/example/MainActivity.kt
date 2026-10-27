@@ -91,6 +91,12 @@ fun BjsegApp(viewModel: BjsegViewModel) {
             viewModel.navigateBack()
         }
 
+        val context = androidx.compose.ui.platform.LocalContext.current
+        val rightActionLabel = when (uiState.destination) {
+            is AppDestination.RmaDetail -> if (uiState.selectedRma?.isPendingPayment == true) "Pagar" else "WhatsApp"
+            else -> null
+        }
+
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
@@ -101,7 +107,16 @@ fun BjsegApp(viewModel: BjsegViewModel) {
                         onNavigateBack = { viewModel.navigateBack() },
                         unreadCount = uiState.unreadNotifCount,
                         onNotificationsClick = { viewModel.onTabSelected(MainNavTab.NOTIFICACOES) },
-                        onProfileClick = { viewModel.onTabSelected(MainNavTab.PERFIL) }
+                        onProfileClick = { viewModel.onTabSelected(MainNavTab.PERFIL) },
+                        rightActionButtonLabel = rightActionLabel,
+                        onRightActionButtonClick = {
+                            val rma = uiState.selectedRma
+                            if (rma != null) {
+                                val url = viewModel.getWhatsAppUrl(rma.rmaNumber, isPayment = rma.isPendingPayment)
+                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
+                                context.startActivity(intent)
+                            }
+                        }
                     )
                     if (uiState.isDemoMode) {
                         DemoModeBadge()

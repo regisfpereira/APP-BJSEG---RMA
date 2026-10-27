@@ -1,6 +1,8 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +23,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.NotificationsNone
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -43,7 +48,21 @@ import com.example.model.NotificationItem
 import com.example.model.RmaStatus
 import com.example.ui.BjsegUiState
 import com.example.ui.BjsegViewModel
-import com.example.ui.theme.BjsegOrange
+import com.example.ui.theme.BlackMain
+import com.example.ui.theme.Gray100
+import com.example.ui.theme.Gray200
+import com.example.ui.theme.Gray300
+import com.example.ui.theme.Gray400
+import com.example.ui.theme.Gray50
+import com.example.ui.theme.Gray500
+import com.example.ui.theme.Gray600
+import com.example.ui.theme.Gray700
+import com.example.ui.theme.Orange100
+import com.example.ui.theme.Orange200
+import com.example.ui.theme.Orange50
+import com.example.ui.theme.Orange500
+import com.example.ui.theme.Orange700
+import com.example.ui.theme.WhitePure
 
 @Composable
 fun NotificationsScreen(
@@ -54,33 +73,54 @@ fun NotificationsScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(WhitePure)
             .padding(16.dp)
     ) {
-        // Top Actions Header
+        // Barra de topo com contagem e ação de marcar todas
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Central de Notificações",
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = BlackMain
+                    )
                 )
-                Text(
-                    text = "${uiState.unreadNotifCount} não lida(s)",
-                    style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
-                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Surface(
+                    color = if (uiState.unreadNotifCount > 0) Orange500 else Gray200,
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text(
+                        text = "${uiState.unreadNotifCount} não lida(s)",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = if (uiState.unreadNotifCount > 0) WhitePure else Gray700
+                        ),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                    )
+                }
             }
 
             if (uiState.unreadNotifCount > 0) {
                 OutlinedButton(
                     onClick = { viewModel.markAllNotificationsAsRead() },
-                    modifier = Modifier.testTag("btn_mark_all_read")
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(1.dp, Gray200),
+                    modifier = Modifier.height(34.dp).testTag("btn_mark_all_read")
                 ) {
-                    Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp), tint = BjsegOrange)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Marcar lidas", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        text = "Marcar lidas",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = BlackMain
+                    )
                 }
             }
         }
@@ -96,15 +136,15 @@ fun NotificationsScreen(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
-                        imageVector = Icons.Default.NotificationsNone,
+                        imageVector = Icons.Outlined.NotificationsNone,
                         contentDescription = null,
-                        modifier = Modifier.size(56.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                        modifier = Modifier.size(48.dp),
+                        tint = Gray400
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = "Nenhuma notificação no momento.",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurfaceVariant),
+                        style = MaterialTheme.typography.bodySmall.copy(color = Gray500),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -115,7 +155,7 @@ fun NotificationsScreen(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(uiState.notifications, key = { it.id }) { notif ->
-                    NotificationCard(
+                    NotificationMinimalCard(
                         item = notif,
                         onClick = {
                             viewModel.markNotificationAsRead(notif.id)
@@ -129,19 +169,11 @@ fun NotificationsScreen(
 }
 
 @Composable
-fun NotificationCard(
+fun NotificationMinimalCard(
     item: NotificationItem,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val (iconBgColor, iconColor) = when (item.statusTrigger) {
-        RmaStatus.AGUARDANDO_PAGAMENTO -> Pair(Color(0xFFFEE2E2), Color(0xFFDC2626))
-        RmaStatus.LIBERADO -> Pair(Color(0xFFCCFBF1), Color(0xFF0D9488))
-        RmaStatus.DISPONIVEL_RETIRADA -> Pair(Color(0xFFDCFCE7), Color(0xFF16A34A))
-        RmaStatus.TROCA -> Pair(Color(0xFFD1FAE5), Color(0xFF059669))
-        else -> Pair(Color(0xFFF1F5F9), Color(0xFF475569))
-    }
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -149,10 +181,10 @@ fun NotificationCard(
             .testTag("notif_card_${item.id}"),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (item.isRead) MaterialTheme.colorScheme.surface else Color(0xFFFFF7ED)
+            containerColor = if (item.isRead) WhitePure else Orange50
         ),
-        border = if (!item.isRead) CardDefaults.outlinedCardBorder().copy(brush = androidx.compose.ui.graphics.SolidColor(BjsegOrange.copy(alpha = 0.4f))) else null,
-        elevation = CardDefaults.cardElevation(defaultElevation = if (item.isRead) 1.dp else 2.dp)
+        border = BorderStroke(1.dp, if (item.isRead) Gray200 else Orange100),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier.padding(14.dp),
@@ -162,13 +194,14 @@ fun NotificationCard(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(iconBgColor),
+                    .border(BorderStroke(1.dp, if (item.isRead) Gray200 else Orange200), CircleShape)
+                    .background(if (item.isRead) Gray100 else Orange100),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Notifications,
+                    imageVector = Icons.Outlined.Notifications,
                     contentDescription = null,
-                    tint = iconColor,
+                    tint = if (item.isRead) Gray600 else Orange700,
                     modifier = Modifier.size(18.dp)
                 )
             }
@@ -184,28 +217,29 @@ fun NotificationCard(
                     Text(
                         text = item.title,
                         style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = if (item.isRead) FontWeight.SemiBold else FontWeight.Bold,
-                            color = if (!item.isRead) BjsegOrange else MaterialTheme.colorScheme.onSurface
+                            fontWeight = FontWeight.Bold,
+                            color = BlackMain
                         )
                     )
 
                     if (!item.isRead) {
-                        Surface(
-                            color = BjsegOrange,
-                            shape = CircleShape,
-                            modifier = Modifier.size(8.dp)
-                        ) {}
+                        Box(
+                            modifier = Modifier
+                                .size(7.dp)
+                                .clip(CircleShape)
+                                .background(Orange500)
+                        )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(3.dp))
+                Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
                     text = item.message,
-                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    style = MaterialTheme.typography.bodySmall.copy(color = Gray600)
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -214,21 +248,22 @@ fun NotificationCard(
                 ) {
                     Text(
                         text = "${item.rmaNumber} • ${item.timestampDisplay}",
-                        style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        style = MaterialTheme.typography.labelSmall.copy(color = Gray500)
                     )
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "Abrir RMA",
+                            text = "Abrir OS",
                             style = MaterialTheme.typography.labelSmall.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = BjsegOrange
+                                color = BlackMain
                             )
                         )
+                        Spacer(modifier = Modifier.width(2.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
-                            tint = BjsegOrange,
+                            tint = BlackMain,
                             modifier = Modifier.size(12.dp)
                         )
                     }

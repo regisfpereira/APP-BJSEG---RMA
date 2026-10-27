@@ -1,8 +1,11 @@
 package com.example.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
@@ -24,6 +28,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -42,8 +47,17 @@ import androidx.compose.ui.unit.sp
 import com.example.model.RmaItem
 import com.example.ui.BjsegUiState
 import com.example.ui.BjsegViewModel
-import com.example.ui.theme.BjsegGold
-import com.example.ui.theme.BjsegOrange
+import com.example.ui.theme.BlackMain
+import com.example.ui.theme.Gray100
+import com.example.ui.theme.Gray200
+import com.example.ui.theme.Gray50
+import com.example.ui.theme.Gray500
+import com.example.ui.theme.Gray600
+import com.example.ui.theme.Orange100
+import com.example.ui.theme.Orange50
+import com.example.ui.theme.Orange500
+import com.example.ui.theme.Orange700
+import com.example.ui.theme.WhitePure
 
 @Composable
 fun RatingScreen(
@@ -61,18 +75,20 @@ fun RatingScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(WhitePure)
             .verticalScroll(scrollState)
             .padding(16.dp)
     ) {
         if (uiState.ratingSuccessMessage != null) {
-            // Success Screen
+            // Tela de confirmação bem-sucedida
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("rating_success_card"),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = WhitePure),
+                border = BorderStroke(1.dp, Gray200),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
@@ -81,34 +97,35 @@ fun RatingScreen(
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = null,
-                        tint = Color(0xFF16A34A),
-                        modifier = Modifier.size(64.dp)
+                        tint = Orange500,
+                        modifier = Modifier.size(54.dp)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "Avaliação Registrada!",
+                        text = "Avaliação Registrada",
                         style = MaterialTheme.typography.headlineSmall.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF166534)
+                            color = BlackMain
                         ),
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
                         text = uiState.ratingSuccessMessage,
-                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface),
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Gray600),
                         textAlign = TextAlign.Center
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Surface(
-                        color = Color(0xFFDCFCE7),
-                        shape = RoundedCornerShape(10.dp),
+                        color = Orange50,
+                        shape = RoundedCornerShape(8.dp),
+                        border = BorderStroke(1.dp, Orange100),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(
@@ -119,12 +136,13 @@ fun RatingScreen(
                                 text = "+ R$ 0,01 em créditos",
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF166534)
+                                    color = Orange700
                                 )
                             )
+                            Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = "Acumulado na sua carteira BJSEG Pós-Vendas",
-                                style = MaterialTheme.typography.labelSmall.copy(color = Color(0xFF15803D))
+                                style = MaterialTheme.typography.labelSmall.copy(color = Gray600)
                             )
                         }
                     }
@@ -135,58 +153,94 @@ fun RatingScreen(
                         onClick = { viewModel.navigateBack() },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(48.dp)
+                            .height(42.dp)
                             .testTag("btn_rating_back_to_rma"),
-                        colors = ButtonDefaults.buttonColors(containerColor = BjsegOrange),
-                        shape = RoundedCornerShape(10.dp)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = BlackMain,
+                            contentColor = WhitePure
+                        ),
+                        shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("Voltar ao Atendimento", fontWeight = FontWeight.Bold)
+                        Text("Voltar ao Atendimento", fontSize = 13.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
         } else {
-            // Rating Form
+            // Formulário de Avaliação
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = WhitePure),
+                border = BorderStroke(1.dp, Gray200),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
-                    // Header with RMA info
                     Text(
                         text = "AVALIAÇÃO DO ATENDIMENTO",
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold,
-                            color = BjsegOrange,
-                            letterSpacing = 1.sp
+                            color = Gray500,
+                            letterSpacing = 0.5.sp
                         )
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
-                        text = rma.rmaNumber,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    Text(
                         text = rma.productName,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = BlackMain
+                        )
                     )
 
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HorizontalDivider(color = Gray200, thickness = 1.dp)
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                    RmaTypeBadge(type = rma.rmaType)
+                    // Grade de informações em 2 colunas
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "NÚMERO DA OS",
+                                style = MaterialTheme.typography.labelSmall.copy(color = Gray500)
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = rma.rmaNumber,
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = BlackMain
+                                )
+                            )
+                        }
+
+                        Box(modifier = Modifier.width(1.dp).height(34.dp).background(Gray200))
+                        Spacer(modifier = Modifier.width(14.dp))
+
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "TIPO",
+                                style = MaterialTheme.typography.labelSmall.copy(color = Gray500)
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = rma.rmaType.displayName,
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = BlackMain
+                                )
+                            )
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Program incentive banner
+                    // Faixa de incentivo do programa
                     Surface(
-                        color = Color(0xFFFFFBEB),
-                        shape = RoundedCornerShape(10.dp),
+                        color = Orange50,
+                        shape = RoundedCornerShape(8.dp),
+                        border = BorderStroke(1.dp, Orange100),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
@@ -196,15 +250,15 @@ fun RatingScreen(
                             Icon(
                                 imageVector = Icons.Default.Star,
                                 contentDescription = null,
-                                tint = Color(0xFFD97706),
-                                modifier = Modifier.size(24.dp)
+                                tint = Orange500,
+                                modifier = Modifier.size(20.dp)
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
                                 text = "Avalie seu atendimento e receba R$ 0,01 em créditos para utilizar como desconto em futuras compras na BJSEG.",
                                 style = MaterialTheme.typography.bodySmall.copy(
                                     fontWeight = FontWeight.Medium,
-                                    color = Color(0xFF92400E)
+                                    color = BlackMain
                                 )
                             )
                         }
@@ -212,17 +266,19 @@ fun RatingScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    // Question
                     Text(
-                        text = "Como foi sua experiência com o atendimento de Pós-Vendas da BJSEG?",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        text = "Como foi sua experiência com o Pós-Vendas?",
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = BlackMain
+                        ),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(14.dp))
 
-                    // 1 to 5 Stars Row
+                    // Linha de 1 a 5 estrelas em Laranja 500 / Cinza 200
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
@@ -233,9 +289,9 @@ fun RatingScreen(
                             Icon(
                                 imageVector = if (isSelected) Icons.Default.Star else Icons.Outlined.Star,
                                 contentDescription = "$i estrelas",
-                                tint = if (isSelected) BjsegGold else Color(0xFFCBD5E1),
+                                tint = if (isSelected) Orange500 else Gray200,
                                 modifier = Modifier
-                                    .size(46.dp)
+                                    .size(44.dp)
                                     .padding(4.dp)
                                     .clickable { viewModel.setRatingStars(i) }
                                     .testTag("star_button_$i")
@@ -255,29 +311,37 @@ fun RatingScreen(
                     }
                     Text(
                         text = "${uiState.ratingStars} de 5 estrelas — $starLabel",
-                        style = MaterialTheme.typography.labelMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = Gray500
                         ),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(18.dp))
 
-                    // Optional Comment Field
+                    // Campo de comentário opcional com borda fina em Gray 200
                     OutlinedTextField(
                         value = uiState.ratingComment,
                         onValueChange = { viewModel.setRatingComment(it) },
-                        label = { Text("Comentário (opcional)") },
-                        placeholder = { Text("Conte com mais detalhes como foi o atendimento do RMA...") },
+                        placeholder = {
+                            Text(
+                                text = "Comentário opcional sobre o atendimento...",
+                                style = MaterialTheme.typography.bodySmall.copy(color = Gray500)
+                            )
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp)
+                            .height(110.dp)
                             .testTag("rating_comment_input"),
+                        shape = RoundedCornerShape(8.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = BjsegOrange,
-                            focusedLabelColor = BjsegOrange
+                            focusedBorderColor = BlackMain,
+                            unfocusedBorderColor = Gray200,
+                            focusedContainerColor = WhitePure,
+                            unfocusedContainerColor = WhitePure,
+                            cursorColor = BlackMain
                         ),
                         maxLines = 4
                     )
@@ -286,26 +350,30 @@ fun RatingScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = uiState.ratingErrorMessage,
-                            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.error)
+                            style = MaterialTheme.typography.bodySmall.copy(color = Orange700)
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
+                    // Botão principal preto
                     Button(
                         onClick = { viewModel.submitRating(rma.id) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(50.dp)
+                            .height(44.dp)
                             .testTag("btn_submit_rating"),
-                        colors = ButtonDefaults.buttonColors(containerColor = BjsegOrange),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = BlackMain,
+                            contentColor = WhitePure
+                        ),
                         enabled = !uiState.isSubmittingRating,
-                        shape = RoundedCornerShape(10.dp)
+                        shape = RoundedCornerShape(8.dp)
                     ) {
                         if (uiState.isSubmittingRating) {
-                            CircularProgressIndicator(color = Color.White, modifier = Modifier.size(22.dp))
+                            CircularProgressIndicator(color = WhitePure, modifier = Modifier.size(20.dp))
                         } else {
-                            Text("Enviar Avaliação", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                            Text("Enviar Avaliação", fontWeight = FontWeight.Bold, fontSize = 13.sp)
                         }
                     }
                 }
